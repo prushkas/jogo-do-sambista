@@ -1,11 +1,15 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Notamusical : MonoBehaviour
 {
     private Rigidbody2D rig;
     public float speed;
+
+    public int damage;
 
     public bool isRight;
 
@@ -26,6 +30,15 @@ public class Notamusical : MonoBehaviour
         else
         {
             rig.velocity = Vector2.left * speed;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.tag == "Enemy")
+        {
+            col.GetComponent<Enemy>().Damage(damage);
+            Destroy(gameObject);
         }
     }
 }
