@@ -5,11 +5,13 @@ using UnityEngine;
 
 public class coin : MonoBehaviour
 {
+    public AudioClip somDaMoeda;
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.tag == "Player")
         {
-            Destroy(gameObject, 0.1f);
+            AudioSource.PlayClipAtPoint(somDaMoeda, transform.position);
+            Destroy(gameObject);
         }
     }
 }

@@ -12,9 +12,13 @@ public class Player : MonoBehaviour
     public float timeToExitAttack;
     public float movement;
 
+    public AudioClip clipAttack, clipJump, clipColeta;
+    public AudioSource sonsPassos;
+
     private Rigidbody2D rig;
     public Transform firePoint;
     public GameObject musicNote;
+    public AudioSource sons;
 
     public Animator anim;
     // Start is called before the first frame update
@@ -22,6 +26,7 @@ public class Player : MonoBehaviour
     {
         rig = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        
     }
 
     // Update is called once per frame
@@ -47,6 +52,17 @@ public class Player : MonoBehaviour
         {
             transform.eulerAngles = new Vector3(0, 180, 0);
         }
+        if(movement != 0)
+        {
+            if (!sonsPassos.isPlaying && !isJump)
+            {
+                sonsPassos.Play();
+            }
+        }
+        if(movement == 0 || isJump)
+        {
+            sonsPassos.Stop();
+        }
     }
 
     void Jump()
@@ -55,6 +71,7 @@ public class Player : MonoBehaviour
         {
             if (!isJump)
             {
+                sons.PlayOneShot(clipJump);
                 rig.AddForce(new Vector2(0, jumpForce), ForceMode2D.Impulse);
                 isJump = true;
             }
@@ -94,6 +111,7 @@ public class Player : MonoBehaviour
                 isFire = true;
                 anim.SetTrigger("attacking");
                 GameObject bolaFogo = Instantiate(musicNote, firePoint.position, firePoint.rotation);
+                sons.PlayOneShot(clipAttack);
                 Invoke(nameof(exitAttack), timeToExitAttack);
 
                 if (transform.rotation.y == 0)
@@ -115,4 +133,6 @@ public class Player : MonoBehaviour
         isFire = false;
         anim.SetBool("isfiring", false);
     }
+
+
 }
